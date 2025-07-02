@@ -32,6 +32,9 @@ pub enum Os {
     Windows,
     Macos,
     Ios,
+    Watchos,
+    Tvos,
+    Visionos,
     FreeBsd,
     NetBsd,
     OpenBsd,
@@ -52,6 +55,9 @@ impl fmt::Display for Os {
             Os::Windows => write!(f, "Windows"),
             Os::Macos => write!(f, "macOS"),
             Os::Ios => write!(f, "iOS"),
+            Os::Watchos => write!(f, "watchOS"),
+            Os::Tvos => write!(f, "tvOS"),
+            Os::Visionos => write!(f, "visionOS"),
             Os::FreeBsd => write!(f, "FreeBSD"),
             Os::NetBsd => write!(f, "NetBSD"),
             Os::OpenBsd => write!(f, "OpenBSD"),
@@ -72,6 +78,8 @@ impl fmt::Display for Os {
 #[serde(rename_all = "lowercase")]
 pub enum Arch {
     Aarch64,
+    Arm64_32,
+    Armv7k,
     Armv5teL,
     Armv6L,
     Armv7L,
@@ -101,6 +109,8 @@ impl fmt::Display for Arch {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             Arch::Aarch64 => write!(f, "aarch64"),
+            Arch::Arm64_32 => write!(f, "arm64_32"),
+            Arch::Armv7k => write!(f, "armv7k"),
             Arch::Armv5teL => write!(f, "armv5tel"),
             Arch::Armv6L => write!(f, "armv6l"),
             Arch::Armv7L => write!(f, "armv7l"),
@@ -133,6 +143,8 @@ impl Arch {
         // MACHINE_ARCH	vs MACHINE_CPUARCH vs MACHINE section
         match self {
             Arch::Aarch64 => "arm64",
+            Arch::Armv7k => "armv7k",
+            Arch::Arm64_32 => "arm64_32",
             Arch::Armv5teL | Arch::Armv6L | Arch::Armv7L => "arm",
             Arch::Powerpc | Arch::Powerpc64Le | Arch::Powerpc64 => "powerpc",
             Arch::X86 => "i386",
@@ -175,6 +187,9 @@ fn get_supported_architectures(os: &Os) -> Vec<Arch> {
         Os::Windows => vec![Arch::X86, Arch::X86_64, Arch::Aarch64],
         Os::Macos => vec![Arch::Aarch64, Arch::X86_64],
         Os::Ios => vec![Arch::Aarch64, Arch::X86_64],
+        Os::Watchos => vec![Arch::Aarch64, Arch::Arm64_32, Arch::Armv7k, Arch::X86_64],
+        Os::Tvos => vec![Arch::Aarch64, Arch::X86_64],
+        Os::Visionos => vec![Arch::Aarch64, Arch::X86_64],
         Os::FreeBsd | Os::NetBsd => vec![
             Arch::Aarch64,
             Arch::Armv6L,
@@ -272,6 +287,9 @@ impl Target {
             OperatingSystem::Windows => Os::Windows,
             OperatingSystem::MacOSX(_) | OperatingSystem::Darwin(_) => Os::Macos,
             OperatingSystem::IOS(_) => Os::Ios,
+            OperatingSystem::TvOS(_) => Os::Tvos,
+            OperatingSystem::WatchOS(_) => Os::Watchos,
+            OperatingSystem::VisionOS(_) => Os::Visionos,
             OperatingSystem::Netbsd => Os::NetBsd,
             OperatingSystem::Freebsd => Os::FreeBsd,
             OperatingSystem::Openbsd => Os::OpenBsd,
@@ -382,6 +400,8 @@ impl Target {
     pub fn get_python_arch(&self) -> &str {
         match self.arch {
             Arch::Aarch64 => "aarch64",
+            Arch::Armv7k => "armv7k",
+            Arch::Arm64_32 => "arm64_32",
             Arch::Armv5teL => "armv5tel",
             Arch::Armv6L => "armv6l",
             Arch::Armv7L => "armv7l",
@@ -450,7 +470,10 @@ impl Target {
             Os::Windows => "windows",
             Os::Linux => "linux",
             Os::Macos => "darwin",
-            Os::Ios => "darwin",
+            Os::Ios => "ios",
+            Os::Watchos => "watchos",
+            Os::Tvos => "tvos",
+            Os::Visionos => "visionOS",
             Os::FreeBsd => "freebsd",
             Os::NetBsd => "netbsd",
             Os::OpenBsd => "openbsd",
@@ -489,7 +512,9 @@ impl Target {
                 major: 2,
                 minor: 36,
             },
-            Arch::Armv5teL
+            | Arch::Armv7k
+            | Arch::Arm64_32
+            | Arch::Armv5teL
             | Arch::Armv6L
             | Arch::Wasm32
             | Arch::Riscv32
@@ -517,7 +542,9 @@ impl Target {
             | Arch::Sparc64
             | Arch::Sparcv9
             | Arch::LoongArch64 => 64,
-            Arch::Armv5teL
+            Arch::Armv7k
+            | Arch::Arm64_32
+            | Arch::Armv5teL
             | Arch::Armv6L
             | Arch::Armv7L
             | Arch::X86
@@ -548,6 +575,9 @@ impl Target {
             Os::Linux
             | Os::Macos
             | Os::Ios
+            | Os::Watchos
+            | Os::Tvos
+            | Os::Visionos
             | Os::FreeBsd
             | Os::NetBsd
             | Os::OpenBsd
