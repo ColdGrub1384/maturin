@@ -311,6 +311,8 @@ impl Target {
                 ArmArchitecture::Armv5te => Arch::Armv5teL,
                 ArmArchitecture::Arm | ArmArchitecture::Armv6 => Arch::Armv6L,
                 ArmArchitecture::Armv7 => Arch::Armv7L,
+                ArmArchitecture::Armv7k => Arch::Armv7k,
+                ArmArchitecture::Arm64_32 => Arch::Arm64_32,
                 _ => bail!("The architecture {} is not supported", arm_arch),
             },
             Architecture::Aarch64(_) => Arch::Aarch64,

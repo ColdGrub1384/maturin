@@ -310,7 +310,7 @@ dependencies = [
  "serde",
  "serde_json",
  "shlex",
- "target-lexicon",
+ "target-lexicon 0.13.1",
  "which",
 ]
 
@@ -1494,7 +1494,7 @@ dependencies = [
  "serde_json",
  "sha2",
  "tar",
- "target-lexicon",
+ "target-lexicon 0.13.2",
  "tempfile",
  "textwrap",
  "thiserror 2.0.12",
@@ -2555,6 +2555,11 @@ name = "target-lexicon"
 version = "0.13.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dc12939a1c9b9d391e0b7135f72fd30508b73450753e28341fed159317582a77"
+
+[[package]]
+name = "target-lexicon"
+version = "0.13.2"
+source = "git+https://gatites.no.binarios.cl/git/pyto/target-lexicon.git#26508e1e0eb24bcd06c95db40a64eb8519cd553e"
 
 [[package]]
 name = "tempfile"
