@@ -475,7 +475,7 @@ impl Target {
             Os::Ios => "ios",
             Os::Watchos => "watchos",
             Os::Tvos => "tvos",
-            Os::Visionos => "visionOS",
+            Os::Visionos => "visionos",
             Os::FreeBsd => "freebsd",
             Os::NetBsd => "netbsd",
             Os::OpenBsd => "openbsd",
